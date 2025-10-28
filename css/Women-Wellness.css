@@ -1,0 +1,201 @@
+/* Basic Styles */
+body { 
+    background: #f7f7f7; 
+    margin: 0; 
+    font-family: 'Segoe UI', sans-serif; 
+}
+
+.container { 
+    max-width: 900px; 
+    margin: 3rem auto; 
+    background: #fff; 
+    border-radius: 12px; 
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); 
+    padding: 2rem; 
+}
+
+h1 { 
+    color: #2e3a59; 
+}
+
+.highlight { 
+    background: #c0ebc6; 
+    border-left: 6px solid #00ff26; 
+    padding: 1rem; 
+    margin: 2rem 0; 
+    font-weight: bold; 
+    color: #000000; 
+}
+
+.nav-links { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 2rem; 
+}
+
+.nav-links a { 
+    background: #00ff26; 
+    color: #fff; 
+    padding: 0.7rem 1.5rem; 
+    border-radius: 6px; 
+    text-decoration: none; 
+    transition: background 0.2s; 
+}
+
+.nav-links a:hover { 
+    background: #00ff26; 
+}
+
+/* Wellness Form Styles */
+.wellness-form-section {
+    max-width: 650px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.form-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.form-card.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Horizontally aligned checkboxes (desktop view) */
+.options.horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Progress Indicator */
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+    margin-top: 30px;
+}
+
+.progress-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 4px;
+    background: #ddd;
+    z-index: 0;
+}
+
+.progress-step {
+    width: 40px;
+    height: 40px;
+    background: #ddd;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    font-weight: bold;
+    color: #fff;
+    z-index: 1;
+    position: relative;
+}
+
+.progress-step.active {
+    background: #4caf50;
+}
+
+/* Question Groups */
+.question-group {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.question-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.question-text {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Form Inputs for Personal Info */
+input[type="text"],
+input[type="tel"],
+input[type="email"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Buttons */
+.next-button {
+    background: #4caf50;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background 0.3s;
+}
+
+.next-button:hover {
+    background: #388e3c;
+}
+
+/* H2 styling */
+h2 {
+    text-align: center;
+    color: green;
+}
+
+/* Responsive adjustments for mobile view */
+@media (max-width: 768px) {
+    /* Checkboxes: Display as a 2x2 grid */
+    .options.horizontal {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    /* Keep progress indicator horizontally aligned */
+    .progress-container {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .progress-container::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        right: 10%;
+        height: 4px;
+        background: #ddd;
+        z-index: 0;
+    }
+    
+    /* Adjust spacing between progress steps */
+    .progress-step {
+        margin: 0 10px;
+    }
+}

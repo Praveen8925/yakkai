@@ -1,0 +1,47 @@
+/* Basic page styles */
+body { 
+    background: #f7f7f7; 
+    margin: 0; 
+    font-family: 'Segoe UI', sans-serif; 
+}
+
+.container { 
+    max-width: 900px; 
+    margin: 3rem auto; 
+    background: #fff; 
+    border-radius: 12px; 
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); 
+    padding: 2rem; 
+}
+
+h1 { 
+    color: #2e3a59; 
+}
+
+.highlight { 
+    background: #c0ebc6; 
+    border-left: 6px solid #00ff26; 
+    padding: 1rem; 
+    margin: 2rem 0; 
+    font-weight: bold; 
+    color: #000000; 
+}
+
+.nav-links { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 2rem; 
+}
+
+.nav-links a { 
+    background: #00ff26; 
+    color: #fff; 
+    padding: 0.7rem 1.5rem; 
+    border-radius: 6px; 
+    text-decoration: none; 
+    transition: background 0.2s; 
+}
+
+.nav-links a:hover { 
+    background: #00ff26; 
+}
