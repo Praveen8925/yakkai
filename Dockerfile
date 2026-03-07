@@ -100,10 +100,10 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN { \
     echo '<VirtualHost *:80>'; \
     echo '    ServerAdmin admin@yakkaineri.com'; \
-    echo '    DocumentRoot /var/www/html/frontend/dist'; \
+    echo '    DocumentRoot /var/www/html/frontend'; \
     echo ''; \
     echo '    # Frontend - serve static React app'; \
-    echo '    <Directory /var/www/html/frontend/dist>'; \
+    echo '    <Directory /var/www/html/frontend>'; \
     echo '        Options -Indexes +FollowSymLinks'; \
     echo '        AllowOverride All'; \
     echo '        Require all granted'; \

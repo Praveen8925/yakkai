@@ -64,7 +64,7 @@ services:
       # Mount .env file (create from .env.example)
       - ./backend/.env:/var/www/html/backend/.env:ro
     ports:
-      - "${WEB_PORT:-80}:80"
+      - "${WEB_PORT:-8000}:80"
     networks:
       - yakkai_network
     healthcheck:
