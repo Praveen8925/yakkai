@@ -7,11 +7,14 @@ WORKDIR /app/frontend
 # Copy package files
 COPY frontend/package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install ALL dependencies (including devDependencies needed for build)
+RUN npm ci
 
 # Copy frontend source
 COPY frontend/ ./
+
+# Debug: List directory structure
+RUN ls -la && ls -la src/ || echo "src directory not found!"
 
 # Build frontend (production mode)
 RUN npm run build
@@ -72,8 +75,8 @@ WORKDIR /var/www/html
 # Copy backend source
 COPY backend/ ./backend/
 
-# Copy built frontend
-COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+# Copy built frontend (Vite builds to ../public_html from frontend/)
+COPY --from=frontend-builder /app/public_html ./frontend
 
 # Install PHP dependencies (skip dev dependencies in production)
 RUN if [ -f backend/composer.json ]; then \

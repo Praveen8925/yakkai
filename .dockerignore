@@ -51,11 +51,11 @@ docs/
 **/temp
 **/.tmp
 
-# Development files
-frontend/src
-frontend/public
-frontend/*.config.js
-frontend/tsconfig.json
+# Development files (commented out - needed for Docker build)
+# frontend/src
+# frontend/public
+# frontend/*.config.js
+# frontend/tsconfig.json
 
 # Composer vendor (will be installed in container)
 backend/vendor
