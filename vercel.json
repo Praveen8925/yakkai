@@ -1,0 +1,39 @@
+{
+    "version": 2,
+    "name": "yakkai-neri",
+    "builds": [
+        {
+            "src": "frontend/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
+        },
+        {
+            "src": "backend/index.php",
+            "use": "vercel-php@0.7.1"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "backend/index.php"
+        },
+        {
+            "src": "/images/(.*)",
+            "dest": "backend/images/$1"
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "frontend/$1",
+            "check": true
+        },
+        {
+            "src": "/(.*)",
+            "dest": "frontend/index.html"
+        }
+    ]
+}

@@ -8,6 +8,15 @@ if (file_exists(__DIR__ . '/.env')) {
         $_ENV[trim($key)] = trim($value);
         putenv(trim($line));
     }
+} else {
+    // On Vercel, variables are provided in $_SERVER or $_ENV directly
+    // Ensure $_ENV is populated from getenv() if not already
+    foreach (['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_PORT', 'JWT_SECRET', 'APP_ENV', 'APP_URL'] as $key) {
+        if (!isset($_ENV[$key])) {
+            $val = getenv($key);
+            if ($val !== false) $_ENV[$key] = $val;
+        }
+    }
 }
 
 // SECURITY FIX: Enforce HTTPS in production
