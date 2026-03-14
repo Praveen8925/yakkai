@@ -21,7 +21,10 @@ if (file_exists(__DIR__ . '/.env')) {
 
 // SECURITY FIX: Enforce HTTPS in production
 if (($_ENV['APP_ENV'] ?? 'production') === 'production') {
-    if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
+    $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    $isVercelHttps = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+    
+    if (!$isHttps && !$isVercelHttps) {
         $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $redirect);
