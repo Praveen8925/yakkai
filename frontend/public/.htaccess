@@ -1,0 +1,13 @@
+# React Router SPA — catch-all redirect
+# Without this, direct URL visits (e.g. /meet-the-trainer) return 404 on Apache
+
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# Don't rewrite real files or directories (images, assets, backend)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Send everything else to index.html (React Router handles the rest)
+RewriteRule ^ index.html [QSA,L]

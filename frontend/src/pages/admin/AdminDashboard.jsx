@@ -2,22 +2,28 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
-import AdminPrograms from './AdminPrograms';
-import AdminGallery from './AdminGallery';
-import AdminPages from './AdminPages';
+import api from '../../api/axios';
+import AdminAssessments from './AdminAssessments';
+import AdminHRUsers from './AdminHRUsers';
 
 const NAV_ITEMS = [
     { id: 'overview', label: 'Overview', icon: 'fas fa-th-large' },
-    { id: 'programs', label: 'Programs', icon: 'fas fa-layer-group' },
-    { id: 'gallery', label: 'Gallery', icon: 'fas fa-images' },
-    { id: 'pages', label: 'Web Pages', icon: 'fas fa-file-alt' },
+    { id: 'assessments', label: 'Assessments', icon: 'fas fa-clipboard-check' },
+    { id: 'hr-users', label: 'HR Users', icon: 'fas fa-building' },
 ];
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user, loading, logout } = useAuth();
     const [activeTab, setActiveTab] = useState('overview');
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [stats, setStats] = useState({
+        hrUsers: 0,
+        totalAssessments: 0,
+        individual: 0,
+        hrTeam: 0,
+    });
+    const [statsLoading, setStatsLoading] = useState(true);
 
     // ── Dark / Light mode ──
     const [isDark, setIsDark] = useState(() => {
@@ -64,20 +70,77 @@ const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        if (!user || user.role !== 'admin') navigate('/admin/login');
-    }, [user, navigate]);
+        // Only redirect if auth check is complete AND user is invalid
+        if (!loading && (!user || user.role !== 'admin')) {
+            navigate('/admin/login');
+        }
+    }, [user, loading, navigate]);
+
+    useEffect(() => {
+        // Fetch stats data when user is authenticated
+        if (user && user.role === 'admin') {
+            loadStats();
+        }
+    }, [user]);
+
+    useEffect(() => {
+        // Reload stats when switching to overview tab
+        if (activeTab === 'overview' && user && user.role === 'admin') {
+            loadStats();
+        }
+    }, [activeTab]);
+
+    const loadStats = async () => {
+        setStatsLoading(true);
+        try {
+            // Fetch both assessment results and HR users in parallel
+            const [assessmentsRes, hrUsersRes] = await Promise.all([
+                api.get('/assessment/results'),
+                api.get('/hr-users'),
+            ]);
+
+            const assessments = assessmentsRes.data.data || [];
+            const hrUsers = hrUsersRes.data.data || [];
+
+            // Calculate stats
+            const individual = assessments.filter(a => a.type === 'individual').length;
+            const hrTeam = assessments.filter(a => a.type === 'employee').length;
+
+            setStats({
+                hrUsers: hrUsers.length,
+                totalAssessments: assessments.length,
+                individual: individual,
+                hrTeam: hrTeam,
+            });
+        } catch (err) {
+            console.error('Failed to load stats:', err);
+        } finally {
+            setStatsLoading(false);
+        }
+    };
 
     const handleLogout = () => { logout(); navigate('/admin/login'); };
 
-    const programs = JSON.parse(localStorage.getItem('admin_programs') || '[]');
-    const gallery = JSON.parse(localStorage.getItem('admin_gallery') || '[]');
-
-    const stats = [
-        { label: 'Total Programs', value: programs.length || 8, icon: 'fas fa-layer-group', color: 'from-green-400 to-green-600' },
-        { label: 'Gallery Images', value: gallery.length || 0, icon: 'fas fa-images', color: 'from-blue-400 to-blue-600' },
-        { label: 'Active Pages', value: 6, icon: 'fas fa-file-alt', color: 'from-purple-400 to-purple-600' },
-        { label: 'Website Status', value: 'Live', icon: 'fas fa-globe', color: 'from-orange-400 to-orange-600' },
+    const statsCards = [
+        { label: 'HR Users', value: stats.hrUsers.toString(), icon: 'fas fa-building', color: 'from-purple-400 to-purple-600' },
+        { label: 'Total Assessments', value: stats.totalAssessments.toString(), icon: 'fas fa-clipboard-list', color: 'from-green-400 to-green-600' },
+        { label: 'Individual', value: stats.individual.toString(), icon: 'fas fa-user', color: 'from-blue-400 to-blue-600' },
+        { label: 'HR / Team', value: stats.hrTeam.toString(), icon: 'fas fa-users', color: 'from-orange-400 to-orange-600' },
     ];
+
+    // Show loading state while checking auth
+    if (loading) {
+        return (
+            <div className={`min-h-screen flex items-center justify-center ${t.root}`}>
+                <div className="text-center">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-4 mx-auto animate-pulse">
+                        <i className="fas fa-leaf text-white text-2xl"></i>
+                    </div>
+                    <p className={`text-lg font-medium ${t.cardTitle}`}>Loading Dashboard...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={`min-h-screen flex font-sans transition-colors duration-300 ${t.root}`}>
@@ -219,7 +282,7 @@ const AdminDashboard = () => {
                                 <div className="space-y-8">
                                     {/* Stats */}
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-                                        {stats.map((s, i) => (
+                                        {statsCards.map((s, i) => (
                                             <motion.div key={i}
                                                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: i * 0.08 }}
@@ -233,32 +296,13 @@ const AdminDashboard = () => {
                                         ))}
                                     </div>
 
-                                    {/* Theme preview strip */}
-                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.35 }}
-                                        className={`rounded-2xl p-5 border flex items-center justify-between transition-colors duration-300 ${t.card}`}>
-                                        <div>
-                                            <p className={`font-semibold ${t.cardTitle}`}>
-                                                {isDark ? '🌙 Dark Mode Active' : '☀️ Light Mode Active'}
-                                            </p>
-                                            <p className={`text-sm mt-0.5 ${t.cardTxt}`}>
-                                                Toggle between dark and light themes using the button in the top bar.
-                                            </p>
-                                        </div>
-                                        <button onClick={toggleTheme}
-                                            className={`px-4 py-2 rounded-xl text-sm font-medium transition ${t.toggleBg}`}>
-                                            {isDark ? '☀️ Switch to Light' : '🌙 Switch to Dark'}
-                                        </button>
-                                    </motion.div>
-
                                     {/* Quick actions */}
                                     <div className={`rounded-2xl p-6 border transition-colors duration-300 ${t.card}`}>
                                         <h2 className={`font-semibold text-lg mb-5 ${t.cardTitle}`}>Quick Actions</h2>
-                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             {[
-                                                { label: 'Manage Programs', icon: 'fas fa-layer-group', tab: 'programs', color: 'bg-green-500 hover:bg-green-600' },
-                                                { label: 'Manage Gallery', icon: 'fas fa-images', tab: 'gallery', color: 'bg-blue-500 hover:bg-blue-600' },
-                                                { label: 'Edit Web Pages', icon: 'fas fa-file-alt', tab: 'pages', color: 'bg-purple-500 hover:bg-purple-600' },
+                                                { label: 'View Assessments', icon: 'fas fa-clipboard-check', tab: 'assessments', color: 'bg-green-500 hover:bg-green-600' },
+                                                { label: 'Manage HR Users', icon: 'fas fa-building', tab: 'hr-users', color: 'bg-purple-500 hover:bg-purple-600' },
                                             ].map(a => (
                                                 <button key={a.tab} onClick={() => setActiveTab(a.tab)}
                                                     className={`${a.color} text-white rounded-xl p-4 flex items-center gap-3 transition-colors`}>
@@ -273,18 +317,16 @@ const AdminDashboard = () => {
                                     <div className={`rounded-2xl p-6 border transition-colors duration-300 ${t.card}`}>
                                         <h2 className={`font-semibold text-lg mb-3 ${t.cardTitle}`}>About This Dashboard</h2>
                                         <p className={`text-sm leading-relaxed ${t.cardTxt}`}>
-                                            Use the sidebar to navigate between sections. You can{' '}
-                                            <strong className={t.cardStrong}>add, edit, and delete</strong> programs
-                                            and gallery images. Changes are saved locally in your browser and reflected on the main website.
-                                            Use <strong className={t.cardStrong}>Web Pages</strong> to edit the content of individual public pages.
+                                            Use the sidebar to navigate between sections. In{' '}
+                                            <strong className={t.cardStrong}>Assessments</strong>, view all individual and HR/team wellness assessment results.
+                                            In <strong className={t.cardStrong}>HR Users</strong>, create and manage company accounts that can access the corporate yoga assessment portal.
                                         </p>
                                     </div>
                                 </div>
                             )}
 
-                            {activeTab === 'programs' && <AdminPrograms isDark={isDark} />}
-                            {activeTab === 'gallery' && <AdminGallery isDark={isDark} />}
-                            {activeTab === 'pages' && <AdminPages isDark={isDark} />}
+                            {activeTab === 'assessments' && <AdminAssessments isDark={isDark} />}
+                            {activeTab === 'hr-users' && <AdminHRUsers isDark={isDark} />}
                         </motion.div>
                     </AnimatePresence>
                 </main>

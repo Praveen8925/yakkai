@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Adolescence = () => {
     return (
-        <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="min-h-screen bg-gray-50">
             <div className="bg-gradient-to-r from-orange-400 to-red-400 text-white py-20">
                 <div className="max-w-7xl mx-auto px-4 text-center">
                     <motion.h1
@@ -80,13 +80,13 @@ const Adolescence = () => {
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        className="rounded-2xl overflow-hidden shadow-lg h-80"
+                        className="rounded-2xl overflow-hidden shadow-lg h-80 bg-gradient-to-br from-purple-600 to-indigo-800 flex items-center justify-center"
                     >
-                        <img
-                            src="https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-                            alt="Teens Yoga"
-                            className="w-full h-full object-cover"
-                        />
+                        <div className="text-center text-white p-10">
+                            <i className="fas fa-child text-6xl text-purple-200 mb-4"></i>
+                            <p className="text-xl font-bold">Youth Yoga Programme</p>
+                            <p className="text-purple-200 text-sm mt-2">Building strong foundations early</p>
+                        </div>
                     </motion.div>
                 </div>
             </div>

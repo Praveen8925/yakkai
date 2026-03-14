@@ -5,7 +5,7 @@ const PrenatalPostnatal = () => {
     return (
         <div className="min-h-screen bg-rose-50 pt-20">
             <div className="relative h-[50vh] flex items-center justify-center text-center text-rose-900 overflow-hidden">
-                <div className="absolute inset-0 bg-cover bg-center opacity-30 blur-sm" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1544126566-475a85b9b87a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80")' }}></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-rose-200 to-rose-300 opacity-40"></div>
                 <div className="relative z-10 p-8 bg-white/60 backdrop-blur-md rounded-3xl shadow-xl max-w-2xl">
                     <motion.h1
                         initial={{ opacity: 0, scale: 0.9 }}

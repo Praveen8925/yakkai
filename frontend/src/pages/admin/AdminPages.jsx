@@ -41,24 +41,9 @@ const PAGES = [
         fields: [
             { key: 'heading', label: 'Page Heading', type: 'text', default: 'Get In Touch' },
             { key: 'subtext', label: 'Sub Text', type: 'textarea', default: 'We\'d love to hear from you. Reach out with any questions.' },
-            { key: 'phone', label: 'Phone Number', type: 'text', default: '+91 98765 43210' },
-            { key: 'email', label: 'Email Address', type: 'text', default: 'info@yakkaineri.com' },
-            { key: 'address', label: 'Address', type: 'textarea', default: 'Yakkai Neri Yoga Academy, Puducherry, India' },
-        ]
-    },
-    {
-        id: 'meetTrainer',
-        label: 'Meet The Trainer',
-        route: '/meet-the-trainer',
-        icon: 'fas fa-user-circle',
-        color: 'from-purple-400 to-purple-600',
-        description: 'Trainer profile, bio, achievements',
-        fields: [
-            { key: 'trainerName', label: 'Trainer Name', type: 'text', default: 'Master Trainer' },
-            { key: 'trainerTitle', label: 'Trainer Title', type: 'text', default: 'Certified Yoga Instructor & Sports Coach' },
-            { key: 'bio', label: 'Biography', type: 'textarea', default: 'With over 15 years of experience in yoga practice and teaching, our master trainer has transformed thousands of lives through the power of yoga.' },
-            { key: 'experience', label: 'Years of Experience', type: 'text', default: '15+' },
-            { key: 'students', label: 'Students Trained', type: 'text', default: '5000+' },
+            { key: 'phone', label: 'Phone Number', type: 'text', default: '+91 90900 80180' },
+            { key: 'email', label: 'Email Address', type: 'text', default: 'contact@yakkaineri.com' },
+            { key: 'address', label: 'Address', type: 'textarea', default: 'No 86, Sengupta Street, Ramnagar, Coimbatore 641009' },
         ]
     },
     {

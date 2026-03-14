@@ -1,7 +1,16 @@
 Options -Indexes
 
+# ── Protect sensitive files from public access ──────────────────────────────
+<FilesMatch "^\.env|composer\.(json|lock)|\.git">
+    Require all denied
+</FilesMatch>
+
 RewriteEngine On
 RewriteBase /Yakkai_Neri/backend/
+
+# Pass Authorization header to PHP (Apache strips it by default)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 # Skip real files and directories - serve them directly
 RewriteCond %{REQUEST_FILENAME} !-f

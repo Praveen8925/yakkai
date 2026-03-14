@@ -24,11 +24,13 @@ const TechSupportedYoga = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <img
-                            src="https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-                            alt="Tech Yoga"
-                            className="rounded-2xl shadow-2xl"
-                        />
+                        <div className="rounded-2xl shadow-2xl bg-gradient-to-br from-blue-700 to-indigo-900 flex items-center justify-center h-72">
+                            <div className="text-center text-white p-10">
+                                <i className="fas fa-laptop-code text-6xl text-blue-300 mb-4"></i>
+                                <p className="text-xl font-bold">Technology-Enhanced Yoga</p>
+                                <p className="text-blue-200 text-sm mt-2">AI · Biometrics · Digital Tracking</p>
+                            </div>
+                        </div>
                     </motion.div>
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}

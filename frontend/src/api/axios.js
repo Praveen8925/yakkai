@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.PROD
-        ? '/api'
-        : 'http://localhost/Yakkai_Neri/backend/api',
+    // .env.development  → VITE_API_BASE=/api        (Vite proxy → localhost/yakkai-main/backend)
+    // .env.production   → VITE_API_BASE=/backend/api (GoDaddy: domain.com/backend/api)
+    baseURL: import.meta.env.VITE_API_BASE || '/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -11,7 +11,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
+        // Check for admin token first, then HR token
+        const token = localStorage.getItem('token') || localStorage.getItem('hr_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -24,10 +25,16 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            // Check which portal is being used and redirect accordingly
             if (window.location.pathname.startsWith('/admin')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 window.location.href = '/admin/login';
+            } else if (window.location.pathname.includes('/assessment/hr-')) {
+                localStorage.removeItem('hr_token');
+                localStorage.removeItem('hr_user');
+                sessionStorage.removeItem('hr_session');
+                window.location.href = '/assessment/hr-login';
             }
         }
         return Promise.reject(error);

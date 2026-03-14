@@ -1,0 +1,70 @@
+# Node modules
+**/node_modules
+**/npm-debug.log
+**/.npm
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment files (will be mounted as volume)
+**/.env
+**/.env.local
+**/.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Tests
+**/test
+**/tests
+**/__tests__
+**/*.test.js
+**/*.spec.js
+
+# Build artifacts
+**/dist
+**/build
+**/.cache
+
+# Logs
+**/*.log
+**/logs
+
+# Temporary files
+**/tmp
+**/temp
+**/.tmp
+
+# Development files (commented out - needed for Docker build)
+# frontend/src
+# frontend/public
+# frontend/*.config.js
+# frontend/tsconfig.json
+
+# Composer vendor (will be installed in container)
+backend/vendor
+
+# Uploads (will be mounted as volume)
+**/uploads
+
+# Misc
+*.zip
+*.tar
+*.gz
+*.rar

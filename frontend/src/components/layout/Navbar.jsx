@@ -1,10 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [coursesDropdownOpen, setCoursesDropdownOpen] = useState(false);
+    const location = useLocation();
+
+    const coursesPaths = ['/wellness', '/therapy', '/women-seniors', '/professional', '/workshops', '/programs'];
+    const isCoursesActive = coursesPaths.some(p => location.pathname.startsWith(p));
+
+    const navLinkClass = (active) =>
+        `px-3 py-2 rounded-md text-sm font-medium transition duration-300 ${active ? 'text-green-500' : 'text-gray-700 hover:text-green-500'
+        }`;
+    const mobileNavLinkClass = (active) =>
+        `px-3 py-2 rounded-md text-lg font-medium transition duration-300 ${active ? 'text-green-500' : 'text-white hover:text-green-500'
+        }`;
 
     return (
         <motion.nav
@@ -34,12 +45,12 @@ const Navbar = () => {
                             className="hidden md:block"
                         >
                             <div className="ml-10 flex items-baseline space-x-4">
-                                <Link to="/" className="text-gray-700 hover:text-green-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">
+                                <Link to="/" className={navLinkClass(location.pathname === '/')}>
                                     Home
                                 </Link>
 
                                 <div className="dropdown relative">
-                                    <button className="text-green-500 px-3 py-2 rounded-md text-sm font-medium flex items-center focus:outline-none">
+                                    <button className={`${navLinkClass(isCoursesActive)} flex items-center focus:outline-none`}>
                                         Courses
                                         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
@@ -51,13 +62,15 @@ const Navbar = () => {
                                         <Link to="/women-seniors" className="dropdown-item">Women & Senior Programs</Link>
                                         <Link to="/professional" className="dropdown-item">Professional Training</Link>
                                         <Link to="/workshops" className="dropdown-item">Workshops</Link>
+                                        <Link to="/programs/corporate-yoga" className="dropdown-item">Corporate Yoga</Link>
                                     </div>
                                 </div>
 
-                                <Link to="/meet-the-trainer" className="text-gray-700 hover:text-green-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">
-                                    Meet The Trainer
+                                <Link to="/trainer" className={navLinkClass(location.pathname === '/trainer')}>
+                                    Trainer
                                 </Link>
-                                <Link to="/contact" className="text-gray-700 hover:text-green-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">
+
+                                <Link to="/contact" className={navLinkClass(location.pathname === '/contact')}>
                                     Contact
                                 </Link>
                             </div>
@@ -108,14 +121,14 @@ const Navbar = () => {
                             </button>
                         </div>
                         <div className="flex flex-col space-y-4 mt-8">
-                            <Link to="/" className="text-white hover:text-green-500 px-3 py-2 rounded-md text-lg font-medium transition duration-300">
+                            <Link to="/" className={mobileNavLinkClass(location.pathname === '/')}>
                                 Home
                             </Link>
 
                             <div>
                                 <button
                                     onClick={() => setCoursesDropdownOpen(!coursesDropdownOpen)}
-                                    className="text-green-500 px-3 py-2 rounded-md text-lg font-medium flex items-center w-full justify-between"
+                                    className={`${mobileNavLinkClass(isCoursesActive)} flex items-center w-full justify-between`}
                                 >
                                     <span>Courses</span>
                                     <svg className={`w-5 h-5 transition-transform ${coursesDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,13 +151,17 @@ const Navbar = () => {
                                     <Link to="/workshops" className="block text-white hover:text-green-500 px-3 py-2 rounded-md text-base font-medium transition duration-300">
                                         Workshops
                                     </Link>
+                                    <Link to="/programs/corporate-yoga" className="block text-white hover:text-green-500 px-3 py-2 rounded-md text-base font-medium transition duration-300">
+                                        Corporate Yoga
+                                    </Link>
                                 </div>
                             </div>
 
-                            <Link to="/meet-the-trainer" className="text-white hover:text-green-500 px-3 py-2 rounded-md text-lg font-medium transition duration-300">
-                                Meet The Trainer
+                            <Link to="/trainer" className={mobileNavLinkClass(location.pathname === '/trainer')}>
+                                Trainer
                             </Link>
-                            <Link to="/contact" className="text-white hover:text-green-500 px-3 py-2 rounded-md text-lg font-medium transition duration-300">
+
+                            <Link to="/contact" className={mobileNavLinkClass(location.pathname === '/contact')}>
                                 Contact
                             </Link>
                         </div>

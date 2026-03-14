@@ -1,10 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
+import api from '../api/axios';
 
 export const AuthContext = createContext();
-
-// Local admin credentials
-const ADMIN_EMAIL = 'admin@yakkaineri.com';
-const ADMIN_PASSWORD = 'admin123';
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -21,23 +18,19 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        // Local credential validation (no backend required)
-        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-            const userData = {
-                id: 1,
-                name: 'Admin',
-                email: ADMIN_EMAIL,
-                role: 'admin',
-            };
-            const fakeToken = 'local-admin-token-' + Date.now();
+        try {
+            // Use the backend API for authentication (SECURITY FIX: removed hardcoded credentials)
+            const response = await api.post('/auth/login', { email, password });
+            const { token, user: userData } = response.data;
 
-            localStorage.setItem('token', fakeToken);
+            localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(userData));
             setUser(userData);
 
             return userData;
-        } else {
-            throw { response: { data: { error: 'Invalid email or password' } } };
+        } catch (error) {
+            // Re-throw the error for the login form to handle
+            throw error;
         }
     };
 

@@ -13,6 +13,9 @@ class AuthMiddleware {
             throw new Exception('No token provided', 401);
         }
 
+        // SECURITY FIX: Removed local-admin-token bypass mechanism
+        // All authentication now goes through proper JWT validation
+        
         return self::decodeJWT($token);
     }
 

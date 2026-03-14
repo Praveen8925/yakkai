@@ -68,13 +68,15 @@ const YogaForSport = () => {
                                 Enhance Your Performance
                             </Link>
                         </div>
-                        <div className="md:w-1/2 grid grid-cols-2 gap-4">
-                            <img src="/images/Facultytraining.jpg" alt="Outdoor group yoga sport training"
-                                className="rounded-xl shadow-lg w-full h-44 object-cover transform rotate-2 hover:rotate-0 transition duration-500"
-                                onError={e => { e.target.src = 'https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; }} />
-                            <img src="/images/Adults Training.jpg" alt="Indoor sport yoga session"
-                                className="rounded-xl shadow-lg w-full h-44 object-cover transform -rotate-2 hover:rotate-0 transition duration-500 mt-8"
-                                onError={e => { e.target.src = 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; }} />
+                        <div className="md:w-1/2 flex items-center justify-center">
+                            <div className="grid grid-cols-2 gap-4 w-full">
+                                {['Flexibility', 'Strength', 'Focus', 'Recovery'].map((item, i) => (
+                                    <div key={i} className="bg-white/15 backdrop-blur-sm rounded-xl p-6 text-center">
+                                        <i className="fas fa-leaf text-yellow-300 text-3xl mb-2"></i>
+                                        <p className="text-white font-semibold text-sm">{item}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,9 +108,12 @@ const YogaForSport = () => {
             {/* Sport-specific section with image */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden md:flex">
-                    <div className="md:w-1/2">
-                        <img src="/images/Facultytraining.jpg" alt="Outdoor athlete yoga session"
-                            className="w-full h-full object-cover min-h-[280px]" />
+                    <div className="md:w-1/2 bg-gradient-to-br from-green-600 to-green-900 flex items-center justify-center min-h-[280px]">
+                        <div className="text-center text-white p-10">
+                            <i className="fas fa-medal text-6xl text-yellow-300 mb-4"></i>
+                            <p className="text-xl font-bold">Sport-Grade Training</p>
+                            <p className="text-green-200 text-sm mt-2">Designed with coaches &amp; physiotherapists</p>
+                        </div>
                     </div>
                     <div className="md:w-1/2 p-8 md:p-12 border-l-8 border-yellow-400 flex flex-col justify-center">
                         <h2 className="text-3xl font-bold text-gray-800 mb-4">Sport-Specific Training</h2>

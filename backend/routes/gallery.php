@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/cors.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../utils/ErrorHandler.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $database = new Database();
@@ -50,8 +51,7 @@ function getGalleryImages($conn) {
             'data' => $images
         ]);
     } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        ErrorHandler::handleDatabaseError($e, 'Get gallery images');
     }
 }
 
@@ -88,8 +88,7 @@ function createGalleryImage($conn) {
             'id' => $newId
         ]);
     } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        ErrorHandler::handleDatabaseError($e, 'Create gallery image');
     }
 }
 
@@ -141,8 +140,7 @@ function updateGalleryImage($conn, $id) {
             'message' => 'Gallery image updated successfully'
         ]);
     } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        ErrorHandler::handleDatabaseError($e, 'Update gallery image');
     }
 }
 
@@ -182,7 +180,6 @@ function deleteGalleryImage($conn, $id) {
             'message' => 'Gallery image deleted successfully'
         ]);
     } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        ErrorHandler::handleDatabaseError($e, 'Delete gallery image');
     }
 }

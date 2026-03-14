@@ -68,7 +68,7 @@ const WomenWellness = () => {
             {/* Hero */}
             <div className="relative h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
                 <div className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.55)), url(/images/KCT.jpg)' }} />
+                    style={{ background: 'linear-gradient(135deg, #831843 0%, #9d174d 50%, #500724 100%)' }} />
                 <div className="relative z-10 max-w-4xl px-4">
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-5 py-1.5 text-sm mb-6">
@@ -211,9 +211,12 @@ const WomenWellness = () => {
                     <p className="text-gray-500">Hundreds of women transforming their health together at Yakkai Neri.</p>
                 </div>
                 <div className="max-w-5xl mx-auto px-4">
-                    <div className="rounded-2xl overflow-hidden shadow-2xl">
-                        <img src="/images/KCT.jpg" alt="Women's mass yoga session at institution"
-                            className="w-full object-cover h-72 md:h-96" />
+                    <div className="rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center h-72 md:h-96">
+                        <div className="text-center text-white p-10">
+                            <i className="fas fa-female text-6xl text-pink-100 mb-4"></i>
+                            <p className="text-2xl font-bold">Institution-Wide Women&apos;s Yoga</p>
+                            <p className="text-pink-200 text-sm mt-2">Mass sessions conducted by Yakkai Neri</p>
+                        </div>
                     </div>
                     <p className="text-center text-gray-400 text-sm mt-3 italic">Institution-wide women's yoga session conducted by Yakkai Neri</p>
                 </div>
@@ -316,10 +319,13 @@ const WomenWellness = () => {
                                         exit={{ opacity: 0, x: -20 }} className="space-y-4">
                                         <h3 className="text-xl font-semibold text-gray-800 mb-4">Contact Details</h3>
                                         <input type="text" name="name" placeholder="Full Name" required onChange={handleChange}
+                                            autoComplete="name"
                                             className="w-full border border-gray-300 rounded-md p-3 bg-gray-50 focus:ring-pink-500 focus:border-pink-500" />
                                         <input type="email" name="email" placeholder="Email Address" required onChange={handleChange}
+                                            autoComplete="email"
                                             className="w-full border border-gray-300 rounded-md p-3 bg-gray-50 focus:ring-pink-500 focus:border-pink-500" />
                                         <input type="tel" name="phone" placeholder="Phone Number" required onChange={handleChange}
+                                            autoComplete="tel"
                                             className="w-full border border-gray-300 rounded-md p-3 bg-gray-50 focus:ring-pink-500 focus:border-pink-500" />
                                         <div className="flex justify-between items-center mt-4">
                                             <button type="button" onClick={() => setStep(2)} className="text-gray-500 hover:text-gray-700 px-4 py-2">← Back</button>

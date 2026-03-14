@@ -34,7 +34,7 @@ const Footer = () => {
                         <ul className="space-y-2">
                             <li><Link to="/" className="text-gray-600 hover:text-green-500 transition duration-300">Home</Link></li>
                             <li><Link to="/wellness" className="text-gray-600 hover:text-green-500 transition duration-300">Wellness Programs</Link></li>
-                            <li><Link to="/meet-the-trainer" className="text-gray-600 hover:text-green-500 transition duration-300">Meet The Trainer</Link></li>
+                            <li><Link to="/trainer" className="text-gray-600 hover:text-green-500 transition duration-300">Trainer</Link></li>
                             <li><Link to="/contact" className="text-gray-600 hover:text-green-500 transition duration-300">Contact</Link></li>
                         </ul>
                     </motion.div>
@@ -46,10 +46,10 @@ const Footer = () => {
                         transition={{ delay: 0.3 }}
                     >
                         <h4 className="text-green-500 font-medium mb-4">Contact Info</h4>
-                        <p className="text-gray-600">Coimbatore, Tamil Nadu</p>
-                        <p className="text-gray-600">Near Hindusthan College of Arts and Science</p>
-                        <p className="text-gray-600 mt-2">+91 98765 43210</p>
-                        <p className="text-gray-600">info@yakkaineri.com</p>
+                        <p className="text-gray-600">No 86, Sengupta Street,</p>
+                        <p className="text-gray-600">Ramnagar, Coimbatore 641009</p>
+                        <p className="text-gray-600 mt-2">+91 90900 80180</p>
+                        <p className="text-gray-600">contact@yakkaineri.com</p>
                     </motion.div>
 
                     <motion.div

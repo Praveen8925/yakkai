@@ -41,7 +41,7 @@ const WomenSeniors = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-pink-50">
             <motion.section
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -53,7 +53,7 @@ const WomenSeniors = () => {
                         initial={{ y: 30, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.6 }}
-                        className="text-4xl md:text-5xl font-bold text-green-500 mb-6"
+                        className="text-4xl md:text-5xl font-bold text-pink-400 mb-6"
                     >
                         Yoga for Women & Seniors
                     </motion.h1>
@@ -84,7 +84,7 @@ const WomenSeniors = () => {
                 </div>
             </section>
 
-            <section className="py-16 bg-gray-50">
+            <section className="py-16 bg-pink-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial="hidden"
@@ -93,8 +93,8 @@ const WomenSeniors = () => {
                         variants={fadeInUp}
                         className="text-center mb-12"
                     >
-                        <h2 className="text-3xl font-bold text-green-500 mb-2">Our Specialized Programs</h2>
-                        <div className="w-20 h-1 bg-green-500 mx-auto"></div>
+                        <h2 className="text-3xl font-bold text-pink-500 mb-2">Our Specialized Programs</h2>
+                        <div className="w-20 h-1 bg-pink-500 mx-auto"></div>
                     </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
@@ -108,9 +108,9 @@ const WomenSeniors = () => {
                                 variants={fadeInUp}
                                 whileHover={{ y: -4, scale: 1.01 }}
                                 transition={{ duration: 0.3 }}
-                                className="bg-white rounded-lg p-6 shadow-md border border-gray-200 hover:border-green-500"
+                                className="bg-white rounded-lg p-6 shadow-md border border-gray-200 hover:border-pink-500"
                             >
-                                <h3 className="text-2xl font-bold text-green-500 mb-4">{program.title}</h3>
+                                <h3 className="text-2xl font-bold text-pink-500 mb-4">{program.title}</h3>
                                 <p className="text-gray-700 font-medium mb-4">{program.subtitle}</p>
                                 <ul className="list-disc list-inside space-y-2 text-gray-700 mb-6">
                                     {program.features.map((feature, i) => (
@@ -125,7 +125,7 @@ const WomenSeniors = () => {
                                         </motion.li>
                                     ))}
                                 </ul>
-                                <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-500 rounded-md">
+                                <div className="mt-6 p-4 bg-gradient-to-r from-pink-50 to-pink-100 border-l-4 border-pink-500 rounded-md">
                                     <p className="text-gray-800 font-medium">
                                         <strong>Outcome:</strong> {program.outcome}
                                     </p>
@@ -141,7 +141,7 @@ const WomenSeniors = () => {
                         transition={{ delay: 0.3 }}
                         className="bg-white rounded-lg p-8 shadow-md"
                     >
-                        <h3 className="text-2xl font-bold text-green-500 mb-4 text-center">Program Outcome</h3>
+                        <h3 className="text-2xl font-bold text-pink-500 mb-4 text-center">Program Outcome</h3>
                         <p className="text-xl text-gray-800 font-medium text-center">
                             Supporting women and seniors with strength, vitality, and calmness
                         </p>
@@ -162,7 +162,7 @@ const WomenSeniors = () => {
                     </p>
                     <Link
                         to="/contact"
-                        className="inline-block bg-white text-green-500 hover:bg-gray-100 px-8 py-3 rounded-md text-lg font-medium transition duration-300 transform hover:scale-105"
+                        className="inline-block bg-white text-pink-500 hover:bg-gray-100 px-8 py-3 rounded-md text-lg font-medium transition duration-300 transform hover:scale-105"
                     >
                         Enroll Now
                     </Link>

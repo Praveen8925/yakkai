@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import api from '../../api/axios';
 
 const stats = [
     { value: '82%', label: 'Reported Better Focus' },
@@ -26,21 +27,54 @@ const monthPlan = [
     { week: 'Week 4', focus: 'Holistic Well-being', practice: 'Sitali Pranayama, Asana flow', result: 'Focus, resilience' },
 ];
 
-const galleryPhotos = [
-    { src: '/images/one.jpg', caption: 'Rooftop Corporate Yoga Session', tag: 'Session' },
-    { src: '/images/Adults Training.jpg', caption: 'Indoor Group Training', tag: 'Training' },
-    { src: '/images/KCT.jpg', caption: 'Institution-Wide Wellness Program', tag: 'Institution' },
-    { src: '/images/Facultytraining.jpg', caption: 'Faculty & Staff Training', tag: 'Faculty' },
-];
-
 const CorporateYoga = () => {
-    const [lightbox, setLightbox] = useState(null);
+
+    const [enquiry, setEnquiry] = useState({
+        company_name: '',
+        contact_name: '',
+        email: '',
+        phone: '',
+        employee_count: '',
+        program_type: 'demo',
+        preferred_schedule: '',
+        message: ''
+    });
+    const [formStatus, setFormStatus] = useState({ type: '', message: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChange = (e) => {
+        setEnquiry({ ...enquiry, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setFormStatus({ type: '', message: '' });
+        try {
+            await api.post('/corporate', enquiry);
+            setFormStatus({
+                type: 'success',
+                message: 'Your enquiry has been received! We will contact you within 24 hours.'
+            });
+            setEnquiry({
+                company_name: '', contact_name: '', email: '', phone: '',
+                employee_count: '', program_type: 'demo', preferred_schedule: '', message: ''
+            });
+        } catch (error) {
+            setFormStatus({
+                type: 'error',
+                message: error.response?.data?.error || 'Failed to submit enquiry. Please try again.'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero */}
-            <div className="relative h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-                style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(/images/one.jpg)' }}>
+            <div className="relative h-[60vh] flex items-center justify-center text-center text-white"
+                style={{ background: 'linear-gradient(135deg, #14532d 0%, #166534 50%, #052e16 100%)' }}>
                 <div className="max-w-4xl px-4">
                     <motion.h1 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                         className="text-4xl md:text-6xl font-bold mb-4 text-green-400">
@@ -74,14 +108,14 @@ const CorporateYoga = () => {
                             Take our short assessment to evaluate stress levels, posture, and flexibility. Understand where you stand in your wellness journey!
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
-                            <Link to="/contact"
+                            <Link to="/assessment/individual"
                                 className="bg-white border-2 border-green-500 text-green-500 hover:bg-green-50 px-8 py-3 rounded-md font-medium transition">
                                 I'm an Individual
                             </Link>
-                            <a href="#corporate-onboarding"
+                            <Link to="/assessment/hr-login"
                                 className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-md font-medium transition">
                                 I'm an HR / Team Lead
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </motion.div>
@@ -155,25 +189,20 @@ const CorporateYoga = () => {
                     </div>
                 </motion.div>
 
-                {/* ── Photo Gallery ── */}
+                {/* ── Session Highlights ── */}
                 <div>
                     <div className="text-center mb-10">
                         <h2 className="text-3xl font-bold text-gray-800 mb-3">From Our Sessions</h2>
-                        <p className="text-gray-500 max-w-xl mx-auto">Real photos from our corporate, faculty, and institutional yoga programs.</p>
+                        <p className="text-gray-500 max-w-xl mx-auto">Real results from our corporate, faculty, and institutional yoga programs.</p>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {galleryPhotos.map((photo, i) => (
-                            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-                                transition={{ delay: i * 0.08 }} whileHover={{ scale: 1.03 }}
-                                className="relative cursor-pointer rounded-xl overflow-hidden shadow-md group"
-                                onClick={() => setLightbox(photo)}>
-                                <img src={photo.src} alt={photo.caption}
-                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-400" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                                    <p className="text-white text-xs font-medium">{photo.caption}</p>
-                                </div>
-                                <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">{photo.tag}</span>
+                        {['Rooftop Corporate Session', 'Indoor Group Training', 'Institution Wellness', 'Faculty & Staff Training'].map((label, i) => (
+                            <motion.div key={i} initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                                transition={{ delay: i * 0.08 }}
+                                className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6 text-center shadow-sm">
+                                <i className="fas fa-users text-green-500 text-2xl mb-3"></i>
+                                <p className="text-gray-700 font-semibold text-sm">{label}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -191,9 +220,13 @@ const CorporateYoga = () => {
                     </div>
                     <div className="md:flex items-center gap-8 p-8">
                         <div className="md:w-1/2 mb-6 md:mb-0">
-                            <img src="/images/Inthemedia.jpg" alt="The Hindu Coverage — Yakkai Neri"
-                                className="rounded-xl shadow-lg w-full object-cover cursor-pointer hover:opacity-90 transition"
-                                onClick={() => setLightbox({ src: '/images/Inthemedia.jpg', caption: 'The Hindu, 12 December 2023 — South West Zone Inter-University Yoga Competition' })} />
+                            <div className="rounded-xl shadow-lg w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-48">
+                                <div className="text-center text-white p-6">
+                                    <i className="fas fa-newspaper text-4xl text-blue-300 mb-3"></i>
+                                    <p className="font-bold text-lg">The Hindu</p>
+                                    <p className="text-gray-400 text-sm">12 December 2023</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="md:w-1/2 space-y-4">
                             <div className="flex items-center gap-3">
@@ -239,38 +272,105 @@ const CorporateYoga = () => {
                     </div>
                 </section>
 
-                {/* CTA */}
-                <section id="corporate-onboarding" className="bg-white rounded-2xl p-12 text-center shadow-xl">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-4">Ready to transform your workplace?</h2>
-                    <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-                        Contact us to schedule your demo session or discuss a customized wellness plan for your team.
-                    </p>
-                    <Link to="/contact"
-                        className="inline-block bg-green-500 hover:bg-green-600 text-white px-10 py-4 rounded-md text-lg font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                        Get in Touch
-                    </Link>
+                {/* ── Corporate Enquiry Form ── */}
+                <section id="corporate-onboarding" className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div className="p-8 bg-green-600 text-white text-center">
+                        <h2 className="text-3xl font-bold mb-2">Book Your Corporate Yoga Programme</h2>
+                        <p className="text-green-100 text-lg">Fill in the details below and we'll get back to you within 24 hours.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-6">
+                        {formStatus.message && (
+                            <div className={`rounded-lg px-5 py-4 text-sm font-medium ${
+                                formStatus.type === 'success'
+                                    ? 'bg-green-50 border border-green-300 text-green-800'
+                                    : 'bg-red-50 border border-red-300 text-red-800'
+                            }`}>
+                                {formStatus.message}
+                            </div>
+                        )}
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Company / Organisation Name <span className="text-red-500">*</span></label>
+                                <input type="text" name="company_name" value={enquiry.company_name} onChange={handleChange} required
+                                    placeholder="e.g. Infosys, Anna University"
+                                    autoComplete="organization"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Your Name <span className="text-red-500">*</span></label>
+                                <input type="text" name="contact_name" value={enquiry.contact_name} onChange={handleChange} required
+                                    placeholder="HR Manager / Point of Contact"
+                                    autoComplete="name"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address <span className="text-red-500">*</span></label>
+                                <input type="email" name="email" value={enquiry.email} onChange={handleChange} required
+                                    placeholder="you@company.com"
+                                    autoComplete="email"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number <span className="text-red-500">*</span></label>
+                                <input type="tel" name="phone" value={enquiry.phone} onChange={handleChange} required
+                                    placeholder="+91 9XXXXXXXXX"
+                                    autoComplete="tel"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Employees</label>
+                                <select name="employee_count" value={enquiry.employee_count} onChange={handleChange}
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800">
+                                    <option value="">Select range</option>
+                                    <option value="1-25">1 – 25</option>
+                                    <option value="26-50">26 – 50</option>
+                                    <option value="51-100">51 – 100</option>
+                                    <option value="101-250">101 – 250</option>
+                                    <option value="250+">250+</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Programme Type <span className="text-red-500">*</span></label>
+                                <select name="program_type" value={enquiry.program_type} onChange={handleChange} required
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800">
+                                    <option value="demo">1-Hour Onsite Demo</option>
+                                    <option value="week_trial">1-Week Trial Programme</option>
+                                    <option value="month_program">1-Month Corporate Programme</option>
+                                    <option value="custom">Custom / Discuss with Trainer</option>
+                                </select>
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Schedule</label>
+                                <select name="preferred_schedule" value={enquiry.preferred_schedule} onChange={handleChange}
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800">
+                                    <option value="">Select preference</option>
+                                    <option value="weekday_morning">Weekday – Morning (7 am – 9 am)</option>
+                                    <option value="weekday_lunch">Weekday – Lunch Break (12 pm – 2 pm)</option>
+                                    <option value="weekday_evening">Weekday – Evening (5 pm – 7 pm)</option>
+                                    <option value="weekend">Weekend</option>
+                                    <option value="flexible">Flexible / Open to Discussion</option>
+                                </select>
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes</label>
+                                <textarea name="message" value={enquiry.message} onChange={handleChange} rows={4}
+                                    placeholder="Any specific requirements, health considerations for the team, or questions..."
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 resize-none" />
+                            </div>
+                        </div>
+
+                        <div className="text-center pt-2">
+                            <button type="submit" disabled={isSubmitting}
+                                className="bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white px-12 py-4 rounded-md text-lg font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none disabled:shadow-none">
+                                {isSubmitting ? 'Submitting…' : 'Send Enquiry'}
+                            </button>
+                        </div>
+                    </form>
                 </section>
             </div>
 
-            {/* Lightbox */}
-            <AnimatePresence>
-                {lightbox && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-                        onClick={() => setLightbox(null)}>
-                        <motion.div initial={{ scale: 0.85 }} animate={{ scale: 1 }} exit={{ scale: 0.85 }}
-                            className="max-w-3xl w-full" onClick={e => e.stopPropagation()}>
-                            <img src={lightbox.src} alt={lightbox.caption}
-                                className="w-full rounded-2xl object-contain max-h-[80vh]" />
-                            <p className="text-white text-center mt-4 text-sm opacity-80">{lightbox.caption}</p>
-                        </motion.div>
-                        <button onClick={() => setLightbox(null)}
-                            className="absolute top-4 right-4 text-white/60 hover:text-white text-3xl">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };

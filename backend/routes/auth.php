@@ -1,11 +1,14 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../middleware/RateLimiter.php';
+require_once __DIR__ . '/../utils/PasswordValidator.php';
+require_once __DIR__ . '/../utils/ErrorHandler.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
-$path   = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path   = preg_replace('#^/Yakkai_Neri/backend/api#', '', $path);
-$path   = preg_replace('#^/api#', '', $path);
+// Use the already-parsed path from index.php (strips base path + /api prefix correctly
+// regardless of the server's subdirectory setup — e.g. /yakkai-main/backend vs /Yakkai_Neri/backend)
+$path = $GLOBALS['requestUri'] ?? '';
 
 $db   = new Database();
 $conn = $db->getConnection();
@@ -27,6 +30,14 @@ if ($method === 'POST' && preg_match('#^/auth/register$#', $path)) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid email address']);
+        exit;
+    }
+
+    // SECURITY FIX: Validate password strength
+    $passwordValidation = PasswordValidator::validate($password);
+    if (!$passwordValidation['valid']) {
+        http_response_code(400);
+        echo json_encode(['error' => PasswordValidator::getErrorMessage($passwordValidation['errors'])]);
         exit;
     }
 
@@ -76,15 +87,34 @@ if ($method === 'POST' && preg_match('#^/auth/login$#', $path)) {
         exit;
     }
 
+    // SECURITY FIX: Rate limiting to prevent brute force attacks
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimitKey = 'login:' . $ip . ':' . $email;
+    
+    if (RateLimiter::tooManyAttempts($rateLimitKey, 5, 15)) {
+        $retryAfter = RateLimiter::availableIn($rateLimitKey);
+        ErrorHandler::logSecurityEvent('Rate limit exceeded', ['email' => $email, 'ip' => $ip]);
+        http_response_code(429);
+        echo json_encode([
+            'error' => 'Too many login attempts. Please try again in ' . ceil($retryAfter / 60) . ' minutes.',
+            'retry_after' => $retryAfter
+        ]);
+        exit;
+    }
+
     $stmt = $conn->prepare('SELECT * FROM users WHERE email = :email LIMIT 1');
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch();
 
     if (!$user || !password_verify($password, $user['password'])) {
+        ErrorHandler::logSecurityEvent('Failed login attempt', ['email' => $email, 'ip' => $ip]);
         http_response_code(401);
         echo json_encode(['error' => 'Invalid email or password']);
         exit;
     }
+
+    // Clear rate limit on successful login
+    RateLimiter::clear($rateLimitKey);
 
     $token = AuthMiddleware::generateJWT([
         'id'    => $user['id'],
@@ -92,6 +122,8 @@ if ($method === 'POST' && preg_match('#^/auth/login$#', $path)) {
         'role'  => $user['role'],
         'name'  => $user['name'],
     ]);
+
+    ErrorHandler::logSecurityEvent('Successful login', ['email' => $email, 'ip' => $ip, 'user_id' => $user['id']]);
 
     echo json_encode([
         'success' => true,

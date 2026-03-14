@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 
 const Contact = () => {
@@ -90,6 +91,7 @@ const Contact = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         required
+                                        autoComplete="name"
                                         className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 transition-all duration-300"
                                     />
                                 </div>
@@ -105,6 +107,7 @@ const Contact = () => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
+                                        autoComplete="email"
                                         className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 transition-all duration-300"
                                     />
                                 </div>
@@ -119,6 +122,7 @@ const Contact = () => {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
+                                        autoComplete="tel"
                                         className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 transition-all duration-300"
                                     />
                                 </div>
@@ -200,8 +204,8 @@ const Contact = () => {
                                     <div>
                                         <h4 className="text-green-800 font-medium mb-1">Our Location</h4>
                                         <p className="text-green-700">
-                                            Coimbatore, Tamil Nadu<br />
-                                            Near Hindusthan College of Arts and Science
+                                            No 86, Sengupta Street,<br />
+                                            Ramnagar, Coimbatore 641009
                                         </p>
                                     </div>
                                 </div>
@@ -213,7 +217,7 @@ const Contact = () => {
                                     <div>
                                         <h4 className="text-green-800 font-medium mb-1">Call Us</h4>
                                         <p className="text-green-700">
-                                            +91 98765 43210<br />
+                                            +91 90900 80180<br />
                                             Mon-Sat: 8:00 AM - 8:00PM
                                         </p>
                                     </div>
@@ -226,8 +230,7 @@ const Contact = () => {
                                     <div>
                                         <h4 className="text-green-800 font-medium mb-1">Email Us</h4>
                                         <p className="text-green-700">
-                                            info@yakkaineri.com<br />
-                                            support@yakkaineri.com
+                                            contact@yakkaineri.com
                                         </p>
                                     </div>
                                 </div>
@@ -264,7 +267,8 @@ const Contact = () => {
                                     </a>
 
                                     {/* Instagram */}
-                                    <a href="#"
+                                    <a href="https://www.instagram.com/yakkaineri?utm_source=qr&igsh=MXI4bHM1bWNzbXBmMA=="
+                                        target="_blank" rel="noopener noreferrer"
                                         className="group flex items-center gap-3 bg-pink-50 hover:bg-gradient-to-br hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 border border-pink-200 hover:border-pink-500 rounded-xl px-3 py-2.5 transition-all duration-250 hover:-translate-y-0.5 hover:shadow-md">
                                         <span className="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 group-hover:bg-white flex items-center justify-center flex-shrink-0 transition-colors">
                                             <i className="fab fa-instagram text-white text-sm"></i>
@@ -289,7 +293,7 @@ const Contact = () => {
                                     </a>
 
                                     {/* WhatsApp */}
-                                    <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"
+                                    <a href="https://wa.me/919090080180" target="_blank" rel="noopener noreferrer"
                                         className="group flex items-center gap-3 bg-emerald-50 hover:bg-emerald-500 border border-emerald-200 hover:border-emerald-500 rounded-xl px-3 py-2.5 transition-all duration-250 hover:-translate-y-0.5 hover:shadow-md">
                                         <span className="w-9 h-9 rounded-lg bg-emerald-500 group-hover:bg-white flex items-center justify-center flex-shrink-0 transition-colors">
                                             <i className="fab fa-whatsapp text-white group-hover:text-emerald-500 text-sm"></i>
@@ -315,6 +319,72 @@ const Contact = () => {
                             </div>
                         </motion.div>
                     </div>
+                </div>
+            </section>
+
+            {/* Google Map Section */}
+            <section className="py-12 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.6 }}
+                    >
+                        <h3 className="text-2xl font-bold text-gray-800 mb-2 text-center">Find Us Here</h3>
+                        <p className="text-gray-500 text-center mb-6 text-sm">
+                            No 86, Sengupta Street, Ramnagar, Coimbatore 641009
+                        </p>
+                        <div className="rounded-xl overflow-hidden shadow-lg border border-green-100">
+                            <iframe
+                                title="Yakkai Neri Location"
+                                src="https://maps.google.com/maps?q=86+Sengupta+Street+Ramnagar+Coimbatore+641009+Tamil+Nadu&output=embed&z=17&iwloc=near"
+                                width="100%"
+                                height="420"
+                                style={{ border: 0 }}
+                                allowFullScreen=""
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
+                        <div className="mt-4 text-center">
+                            <a
+                                href="https://maps.google.com/?q=86+Sengupta+Street+Ramnagar+Coimbatore+641009+Tamil+Nadu"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium transition duration-300 text-sm"
+                            >
+                                <i className="fas fa-directions"></i>
+                                Get Directions
+                            </a>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ── Individual Assessment Link Generator CTA ── */}
+            <section className="py-14 bg-gradient-to-r from-green-600 to-green-700 text-white">
+                <div className="max-w-4xl mx-auto px-4 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-5">
+                            <i className="fas fa-link text-2xl"></i>
+                        </div>
+                        <h2 className="text-2xl font-bold mb-3">Share a Wellness Assessment</h2>
+                        <p className="text-green-100 text-sm max-w-lg mx-auto mb-6 leading-relaxed">
+                            Generate a unique link for the individual wellness assessment and share it with a colleague,
+                            friend, or anyone you'd like to invite — no login required.
+                        </p>
+                        <Link
+                            to="/assessment/generate-link"
+                            className="inline-flex items-center gap-2 bg-white text-green-700 hover:bg-green-50 font-semibold px-7 py-3 rounded-lg transition transform hover:scale-105 shadow-lg"
+                        >
+                            <i className="fas fa-magic"></i>
+                            Generate Assessment Link
+                        </Link>
+                    </motion.div>
                 </div>
             </section>
         </div>

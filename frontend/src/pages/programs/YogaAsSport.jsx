@@ -1,22 +1,15 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const photos = [
-    { src: '/images/Champion-award.jpg', caption: 'All India Inter-University Yoga Championship 2019–20', tag: 'Championship' },
-    { src: '/images/three.jpg', caption: 'State-Level Women\'s Team — Runner-Up Trophy', tag: 'Competition' },
-    { src: '/images/victory.jpg', caption: 'International Yoga Festival 2023 — Award Ceremony', tag: 'Awards' },
-    { src: '/images/two.jpg', caption: 'Young Champions with International Jury', tag: 'Kids Team' },
-];
+
 
 const YogaAsSport = () => {
-    const [lightbox, setLightbox] = useState(null);
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="min-h-screen bg-gray-50">
             {/* Hero */}
             <div className="relative h-[55vh] flex items-center justify-center text-center text-white overflow-hidden"
-                style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(/images/Champion-award.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                style={{ background: 'linear-gradient(135deg, #166534 0%, #14532d 50%, #052e16 100%)' }}>
                 <div className="max-w-4xl px-4">
                     <motion.h1 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                         className="text-4xl md:text-6xl font-bold mb-4 text-green-400 drop-shadow-lg">
@@ -41,9 +34,12 @@ const YogaAsSport = () => {
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                     className="bg-white rounded-2xl shadow-xl overflow-hidden">
                     <div className="md:flex">
-                        <div className="md:w-1/2">
-                            <img src="/images/three.jpg" alt="Yoga as Sport"
-                                className="h-full w-full object-cover min-h-[280px]" />
+                        <div className="md:w-1/2 bg-gradient-to-br from-green-700 to-green-900 flex items-center justify-center min-h-[280px]">
+                            <div className="text-center text-white p-10">
+                                <i className="fas fa-trophy text-6xl text-yellow-300 mb-4"></i>
+                                <p className="text-xl font-bold">Championship Excellence</p>
+                                <p className="text-green-200 text-sm mt-2">State · National · All India Level</p>
+                            </div>
                         </div>
                         <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
                             <h2 className="text-3xl font-bold text-gray-800 mb-4">Who We Are</h2>
@@ -97,30 +93,6 @@ const YogaAsSport = () => {
                     ))}
                 </div>
 
-                {/* ── Photo Gallery ── */}
-                <div>
-                    <div className="text-center mb-10">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-3">Our Champions</h2>
-                        <p className="text-gray-500 max-w-xl mx-auto">Real moments from our academy — competitions, championships, and victories that define Yakkai Neri.</p>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {photos.map((photo, i) => (
-                            <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-                                transition={{ delay: i * 0.08 }} whileHover={{ scale: 1.03 }}
-                                className="relative cursor-pointer rounded-xl overflow-hidden shadow-md group"
-                                onClick={() => setLightbox(photo)}>
-                                <img src={photo.src} alt={photo.caption}
-                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-400" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                                    <p className="text-white text-xs font-medium">{photo.caption}</p>
-                                </div>
-                                <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">{photo.tag}</span>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
                 {/* Stats */}
                 <div className="bg-green-600 rounded-2xl p-10 text-white text-center">
                     <h2 className="text-2xl font-bold mb-8">Our Track Record</h2>
@@ -147,25 +119,6 @@ const YogaAsSport = () => {
                 </div>
             </div>
 
-            {/* Lightbox */}
-            <AnimatePresence>
-                {lightbox && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-                        onClick={() => setLightbox(null)}>
-                        <motion.div initial={{ scale: 0.85 }} animate={{ scale: 1 }} exit={{ scale: 0.85 }}
-                            className="max-w-3xl w-full" onClick={e => e.stopPropagation()}>
-                            <img src={lightbox.src} alt={lightbox.caption}
-                                className="w-full rounded-2xl object-contain max-h-[80vh]" />
-                            <p className="text-white text-center mt-4 text-sm opacity-80">{lightbox.caption}</p>
-                        </motion.div>
-                        <button onClick={() => setLightbox(null)}
-                            className="absolute top-4 right-4 text-white/60 hover:text-white text-3xl">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };
