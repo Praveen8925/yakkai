@@ -21,10 +21,13 @@ if (file_exists(__DIR__ . '/.env')) {
 
 // SECURITY FIX: Enforce HTTPS in production
 if (($_ENV['APP_ENV'] ?? 'production') === 'production') {
+    $isVercel = isset($_SERVER['VERCEL']) || isset($_SERVER['HTTP_X_VERCEL_ID']);
     $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-    $isVercelHttps = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+    $isForwardedHttps = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
     
-    if (!$isHttps && !$isVercelHttps) {
+    // On Vercel, we don't need to redirect in PHP as Vercel handles it.
+    // However, if we're on a traditional server, we still want the redirect.
+    if (!$isVercel && !$isHttps && !$isForwardedHttps) {
         $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $redirect);
